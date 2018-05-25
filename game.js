@@ -76,3 +76,60 @@ class Actor {
         }
     }
 }
+
+class Level {
+    constructor(grid, actors) {
+        this.grid = grid;
+        this.actors = actors;
+        this.status = null;
+        this.finishDelay = 1;
+    }
+    get height() {
+        if (this.grid == undefined) {
+            return 0;
+        } else {
+            return this.grid.length;
+        }
+        
+    }
+    get width() {
+        if (this.grid == undefined) {
+            return 0;
+        } else {
+            return this.grid[0].length;
+        }
+    }
+    get player() {
+        return this.actors.find(obj => obj.type === 'player');
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
