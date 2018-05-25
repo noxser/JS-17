@@ -127,7 +127,7 @@ class Level {
             }
         }
     }
-    
+
     obstacleAt(position, size) {
         if (!(position instanceof Vector) || !(size instanceof Vector)) {
             throw new Error("Ошибка переданный объект не класса Vector");
@@ -142,22 +142,14 @@ class Level {
         if (posX < 0 ||  posX+sizeX > this.width || posY < 0) {return 'wall';} 
         if (posY + sizeY > this.height) {return 'lava';} 
         
-        if (this.grid[posY][posX]=='wall') {
-          return 'wall'
-        } else if (this.grid[posY][posX]=='lava') {
-          return 'lava'
-        } else if (this.grid[sizeY + posY][posX]=='wall') {
-          return undefined;
-        } else if (this.grid[posY-1][posX]=='wall') {
-          return undefined;
-        } else if (this.grid[posY][posX-1]=='wall') {
-          return undefined;
-        } else if (this.grid[posY][posX+1]=='wall') {
-          return undefined;
-        } else {
-        return false;
+        
+        for (let y = posY; y < posY + sizeY; y++) {
+            for (let x = posX; x < posX + sizeX; x++) {
+                if (this.grid[y][x] === undefined) continue;
+                if (this.grid[y][x] === "lava") return "lava";
+                if (this.grid[y][x] === "wall") return "wall";
+            }
         }
-  
     }
 }
 
