@@ -137,15 +137,12 @@ class Level {
         const posY = Math.floor(position.y);
         const sizeX = Math.ceil(size.x);
         const sizeY = Math.ceil(size.y);
+                
         
-
+        if (posX < 0 ||  posX+sizeX > this.width || posY < 0) {return 'wall';} 
+        if (posY + sizeY > this.height) {return 'lava';} 
         
-        
-        if (posX < 0 ||  posX > this.width-sizeX || posY < 0) {
-          return 'wall'; 
-        } else if (posY + sizeY > this.height) {
-          return 'lava';
-        } else if (this.grid[posY][posX]=='wall') {
+        if (this.grid[posY][posX]=='wall') {
           return 'wall'
         } else if (this.grid[posY][posX]=='lava') {
           return 'lava'
