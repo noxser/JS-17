@@ -84,6 +84,7 @@ class Level {
         this.status = null;
         this.finishDelay = 1;
     }
+    
     get height() {
         if (this.grid == undefined) {
             return 0;
@@ -92,17 +93,77 @@ class Level {
         }
         
     }
+    
     get width() {
-        if (this.grid == undefined) {
+        if (this.grid === undefined) {
             return 0;
         } else {
             return this.grid[0].length;
         }
     }
+    
     get player() {
         return this.actors.find(obj => obj.type === 'player');
     }
+    
+    isFinished() {
+        if (this.status != null && this.finishDelay < 0) {
+            return true;      
+        } else if (this.status == null && this.finishDelay > 0) {
+            return false; 
+        } else {             
+            return false;         
+        }
+    }
+    
+    actorAt(actor) {
+        if (!(actor instanceof Actor)) {
+            throw new Error("Ошибка переданный объект не класса Actor");
+        } else if (this.actors == undefined) {
+            return undefined;
+        } else if (this.actors.length == 1) {
+            return undefined;
+        } else {
+            let act = this.actors.filter(item => actor.isIntersect(item));
+            if (act) {
+                return act[0];
+            } else {
+                return undefined;   
+            }
+        }
+    }
+    
+    obstacleAt(position, size) {
+        const posX = Math.floor(position.x);
+        const posY = Math.floor(position.y);
+        const sizeX = Math.ceil(size.x);
+        const sizeY = Math.ceil(size.y);
+        
+        if (!(position instanceof Vector)) {
+          throw new Error("Ошибка переданный объект не класса Vector");
+        } else if (posX < 0 ||  posX > this.width-sizeX || posY < 0) {
+          return 'wall'; 
+        } else if (posY + sizeY > this.height) {
+          return 'lava';
+        } else if (this.grid[posY][posX]=='wall') {
+          return 'wall'
+        } else if (this.grid[posY][posX]=='lava') {
+          return 'lava'
+        } else if (this.grid[sizeY + posY][posX]=='wall') {
+          return undefined;
+        } else if (this.grid[posY-1][posX]=='wall') {
+          return undefined;
+        } else if (this.grid[posY][posX-1]=='wall') {
+          return undefined;
+        } else if (this.grid[posY][posX+1]=='wall') {
+          return undefined;
+        } else {
+        return false;
+        }
+  
+    }
 }
+
 
 
 
