@@ -86,20 +86,16 @@ class Level {
     }
     
     get height() {
-        if (this.grid == undefined) {
-            return 0;
-        } else {
-            return this.grid.length;
-        }
-        
+        if (this.grid == undefined) {return 0;}
+        return this.grid.length;        
     }
     
     get width() {
-        if (this.grid === undefined) {
-            return 0;
-        } else {
-            return this.grid[0].length;
-        }
+        if (this.grid === undefined) {return 0;} 
+        let max = 0;
+        for (let i = 0; i < this.grid.length; i++) {
+            if (this.grid[i].length > max) max = this.grid[i].length;}
+        return max;
     }
     
     get player() {
@@ -107,13 +103,12 @@ class Level {
     }
     
     isFinished() {
-        if (this.status != null && this.finishDelay < 0) {
+        if (this.status !== null && this.finishDelay < 0) {
             return true;      
         } else if (this.status == null && this.finishDelay > 0) {
             return false; 
-        } else {             
-            return false;         
-        }
+        }             
+        return false;         
     }
     
     actorAt(actor) {
@@ -134,14 +129,19 @@ class Level {
     }
     
     obstacleAt(position, size) {
+        if (!(position instanceof Vector) || !(size instanceof Vector)) {
+            throw new Error("Ошибка переданный объект не класса Vector");
+        }
+        
         const posX = Math.floor(position.x);
         const posY = Math.floor(position.y);
         const sizeX = Math.ceil(size.x);
         const sizeY = Math.ceil(size.y);
         
-        if (!(position instanceof Vector)) {
-          throw new Error("Ошибка переданный объект не класса Vector");
-        } else if (posX < 0 ||  posX > this.width-sizeX || posY < 0) {
+
+        
+        
+        if (posX < 0 ||  posX > this.width-sizeX || posY < 0) {
           return 'wall'; 
         } else if (posY + sizeY > this.height) {
           return 'lava';
