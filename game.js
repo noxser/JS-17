@@ -151,6 +151,21 @@ class Level {
             }
         }
     }
+
+    removeActor(actor) {
+        if (this.actors.includes(actor)) {
+            this.actors.splice(this.actors.indexOf(actor),1);
+        }
+    }
+
+    noMoreActors(type) {
+        return (this.actors === undefined || !(this.actors.find(obj => obj.type === type))) ? true : false;
+    }
+
+    playerTouched() {
+        
+    }
+
 }
 
 
