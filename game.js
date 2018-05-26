@@ -168,3 +168,34 @@ class Level {
 
 }
 
+const actorsDict = {
+    'x' : 'wall',
+    '!' : 'lava',
+    '@' : 'player object',
+    'o' : 'coin object',
+    '=' : 'fireball object',
+    '|' : 'fireball object',
+    'v' : 'rain'
+}
+
+class LevelParser {
+
+    constructor(actorsDict) {
+        this.actorsDict = actorsDict;
+    }
+
+    actorFromSymbol(sym) {
+        if (sym === undefined) return undefined;
+        return this.actorsDict[sym];
+    }        
+    
+
+    obstacleFromSymbol(sym) {
+        if (sym === 'x') {return 'wall'};
+        if (sym === '!') {return 'lava'};
+    } 
+
+    createGrid(plan) {
+        if (plan) {return []};
+    }
+}
