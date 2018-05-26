@@ -162,8 +162,12 @@ class Level {
         return (this.actors === undefined || !(this.actors.find(obj => obj.type === type))) ? true : false;
     }
 
-    playerTouched() {
-        
+    playerTouched(type, actor) {
+        if (type === 'lava' || type === 'fireball') {this.status = 'lost'};
+        if (type === 'coin') {
+            if (!this.noMoreActors(type)) {this.removeActor(actor)};
+            if (this.noMoreActors(type)) {this.status = 'won'};
+        }
     }
 
 }
