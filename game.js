@@ -297,16 +297,33 @@ class Coin extends Actor {
     constructor(pos = new Vector(0,0)) {
         super();
         this.pos =  new Vector(pos.x + 0.2, pos.y + 0.1);
+        this.startPos = new Vector(pos.x + 0.2, pos.y + 0.1);
         this.size = new Vector(0.6, 0.6);
         this.speed = new Vector(0, 3);
         this.spring = Math.floor(Math.random() * (2*Math.PI + 1));
         this.springSpeed = 8;
-        this.springDist = 0.07;
+        this.springDist = 0.07;        
     }
 
-    get type() {
+    get type () {
         return 'coin';
     }
-}
 
+    updateSpring (time = 1) {
+        this.spring = this.spring + this.springSpeed * time;
+    }
+
+    getSpringVector () {
+        return new Vector(0, Math.sin(this.spring) * this.springDist);
+    }
+
+    getNextPosition (time = 1) {
+        this.updateSpring(time);
+        return new Vector(this.startPos.x, this.startPos.y + this.getSpringVector(time).y);
+    }
+
+    act (time = 1) {
+        this.pos = this.getNextPosition(time);
+    }
+}
 
