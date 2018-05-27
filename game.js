@@ -200,15 +200,14 @@ class LevelParser {
     createActors(plan) {
         if (plan.length === 0 || this.symbolDict === undefined) {return []};
         let actors = [], actor, sym, actorClass; 
-        for (let i = 0; i < plan.length; i++) {
-          for (let j = 0; j < plan[i].length; j++) {
-            sym = plan [i][j];
+        for (let y = 0; y < plan.length; y++) {
+          for (let x = 0; x < plan[y].length; x++) {
+            sym = plan [y][x];
             actorClass = this.actorFromSymbol(sym);
             if (typeof(actorClass) === 'function') {
-                actor = new actorClass(new Vector(j, i));
+                actor = new actorClass(new Vector(x, y));
                 if (actor instanceof Actor) actors.push(actor);
             }
-
           }
         }
         return actors;
@@ -217,8 +216,6 @@ class LevelParser {
     parse() {
 
     }
-
-
 }
 
 
