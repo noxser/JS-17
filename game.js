@@ -170,13 +170,13 @@ class Level {
 
 class LevelParser {
 
-    constructor(actorsDict = {}) {
-        this.actorsDict = actorsDict;
+    constructor(symbolDict) {
+        this.symbolDict = symbolDict;
     }
 
     actorFromSymbol(sym) {
         if (sym === undefined) return undefined;
-        return this.actorsDict[sym];
+        return this.symbolDict[sym];
     }        
     
 
@@ -186,31 +186,32 @@ class LevelParser {
     } 
 
     createGrid(plan) {
-        if (plan.length == 0) {return []};
-        var mass = []; 
-        while (mass.length < plan.length) {
-          mass.push([])
-        };
-        for (let i = 0; i < plan.length; i++) {
-          for (let j = 0; j < plan[i].length; j++) {
-            mass[i][j] = this.obstacleFromSymbol(plan[i][j])
+        let grid = []; 
+        while (grid.length < plan.length) {
+          grid.push([])};
+        for (let y = 0; y < plan.length; y++) {
+          for (let x = 0; x < plan[y].length; x++) {
+            grid[y][x] = this.obstacleFromSymbol(plan[y][x])
           }
         }
-        return mass;
+        return grid;
     }
 
     createActors(plan) {
-        if (plan.length === 0 || plan === undefined) {return []};
-        var mass = []; 
-        while (mass.length < plan.length) {
-          mass.push([])
-        };
+        if (plan.length === 0 || this.symbolDict === undefined) {return []};
+        let actors = [], actor, sym, actorClass; 
         for (let i = 0; i < plan.length; i++) {
           for (let j = 0; j < plan[i].length; j++) {
-            mass[i][j] = this.actorFromSymbol(plan[i][j])
+            sym = plan [i][j];
+            actorClass = this.actorFromSymbol(sym);
+            if (typeof(actorClass) === 'function') {
+                actor = new actorClass(new Vector(j, i));
+                if (actor instanceof Actor) actors.push(actor);
+            }
+
           }
         }
-        return mass;
+        return actors;
     }
 
     parse() {
