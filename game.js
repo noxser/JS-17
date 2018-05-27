@@ -16,6 +16,7 @@ class Vector {
       return new Vector(this.x * num, this.y * num)};
 }
 
+
 class Actor {
 
     constructor(position, size, speed) {
@@ -72,6 +73,7 @@ class Actor {
         }
     }
 }
+
 
 class Level {
     constructor(grid, actors) {
@@ -168,6 +170,7 @@ class Level {
 
 }
 
+
 class LevelParser {
 
     constructor(symbolDict) {
@@ -249,3 +252,61 @@ class Fireball extends Actor {
         }
     }
 }
+
+
+class HorizontalFireball extends Fireball {
+
+    constructor(pos) {
+        super();
+        this.pos = pos;
+        this.speed = new Vector(2,0);
+    }
+
+}
+
+
+class  VerticalFireball extends Fireball {
+
+    constructor(pos) {
+        super();
+        this.pos = pos;
+        this.speed = new Vector(0,2);
+    }
+
+}
+
+
+class  FireRain extends Fireball {
+
+    constructor(pos) {
+        super();
+        this.pos = pos;
+        this.speed = new Vector(0,3);
+        this.startPos = pos;
+    }
+   
+    handleObstacle () {
+        this.speed;
+        this.pos = this.startPos;
+    }
+}
+
+
+class Coin extends Actor {
+
+    constructor(pos = new Vector(0,0)) {
+        super();
+        this.pos =  new Vector(pos.x + 0.2, pos.y + 0.1);
+        this.size = new Vector(0.6, 0.6);
+        this.speed = new Vector(0, 3);
+        this.spring = Math.floor(Math.random() * (2*Math.PI + 1));
+        this.springSpeed = 8;
+        this.springDist = 0.07;
+    }
+
+    get type() {
+        return 'coin';
+    }
+}
+
+
