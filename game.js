@@ -168,19 +168,9 @@ class Level {
 
 }
 
-const actorsDict = {
-    'x' : 'wall',
-    '!' : 'lava',
-    '@' : 'player object',
-    'o' : 'coin object',
-    '=' : 'fireball object',
-    '|' : 'fireball object',
-    'v' : 'rain'
-}
-
 class LevelParser {
 
-    constructor(actorsDict) {
+    constructor(actorsDict = {}) {
         this.actorsDict = actorsDict;
     }
 
@@ -196,6 +186,38 @@ class LevelParser {
     } 
 
     createGrid(plan) {
-        if (plan) {return []};
+        if (plan.length == 0) {return []};
+        var mass = []; 
+        while (mass.length < plan.length) {
+          mass.push([])
+        };
+        for (let i = 0; i < plan.length; i++) {
+          for (let j = 0; j < plan[i].length; j++) {
+            mass[i][j] = this.obstacleFromSymbol(plan[i][j])
+          }
+        }
+        return mass;
     }
+
+    createActors(plan) {
+        if (plan.length === 0 || plan === undefined) {return []};
+        var mass = []; 
+        while (mass.length < plan.length) {
+          mass.push([])
+        };
+        for (let i = 0; i < plan.length; i++) {
+          for (let j = 0; j < plan[i].length; j++) {
+            mass[i][j] = this.actorFromSymbol(plan[i][j])
+          }
+        }
+        return mass;
+    }
+
+    parse() {
+
+    }
+
+
 }
+
+
