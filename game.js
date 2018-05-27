@@ -214,10 +214,7 @@ class LevelParser {
     }
 
     parse(plan) {
-        let actors = this.createActors(plan);
-        let grid = this.createGrid(plan);
-        return new Level(grid, actors);
-
+        return new Level(this.createGrid(plan), this.createActors(plan));
     }
 }
 
