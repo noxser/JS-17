@@ -131,18 +131,16 @@ class Level {
             throw new Error("Ошибка переданный объект не класса Vector");
         }
         
-        const posX = Math.floor(position.x);
-        const posY = Math.floor(position.y);
-        const sizeX = Math.ceil(size.x);
-        const sizeY = Math.ceil(size.y);
+        const Left = Math.floor(position.x);
+        const Top = Math.floor(position.y);
+        const Bottom = Math.ceil(position.y+size.y)
+        const Right = Math.ceil(position.x+size.x)
+                        
+        if (Left < 0 ||  Right > this.width || Top < 0) {return 'wall';} 
+        if (Bottom > this.height) {return 'lava';} 
                 
-        
-        if (posX < 0 ||  posX+sizeX > this.width || posY < 0) {return 'wall';} 
-        if (posY + sizeY > this.height) {return 'lava';} 
-        
-        
-        for (let y = posY; y < posY + sizeY; y++) {
-            for (let x = posX; x < posX + sizeX; x++) {
+        for (let y = Top; y < Bottom; y++) {
+            for (let x = Left; x < Right; x++) {
                 if (this.grid[y][x] === undefined) continue;
                 if (this.grid[y][x] === "lava") return "lava";
                 if (this.grid[y][x] === "wall") return "wall";
@@ -340,6 +338,7 @@ class Player extends Actor {
         return 'player';
     }
 }
+
 
 const schema = [
     '         ',
