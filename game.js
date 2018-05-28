@@ -340,18 +340,88 @@ class Player extends Actor {
 }
 
 
-const schema = [
-    'v       |',
-    '         ',
-    '    =    ',
-    '       o ',
-    '     !xxx',
-    ' @o      ',
-    'xxx!     ',
-    '         '
-  ];
+const schemas = [
+    [
+      "     v                 ",
+      "                       ",
+      "                       ",
+      "                       ",
+      "                       ",
+      "  |                    ",
+      "  o                 o  ",
+      "  x               = x  ",
+      "  x          o o    x  ",
+      "  x  @       xxxxx  x  ",
+      "  xxxxx             x  ",
+      "      x!!!!!!!!!!!!!x  ",
+      "      xxxxxxxxxxxxxxx  ",
+      "                       "
+    ],
+    [
+      "        |           |  ",
+      "                       ",
+      "                       ",
+      "                       ",
+      "                       ",
+      "                       ",
+      "                       ",
+      "                       ",
+      "                       ",
+      "     |                 ",
+      "                       ",
+      "         =      |      ",
+      " @ |  o            o   ",
+      "xxxxxxxxx!!!!!!!xxxxxxx",
+      "                       "
+    ],
+    [
+      "                       ",
+      "                       ",
+      "                       ",
+      "    o                  ",
+      "    x      | x!!x=     ",
+      "         x             ",
+      "                      x",
+      "                       ",
+      "                       ",
+      "                       ",
+      "               xxx     ",
+      "                       ",
+      "                       ",
+      "       xxx  |          ",
+      "                       ",
+      " @                     ",
+      "xxx                    ",
+      "                       "
+    ], [
+      "   v         v",
+      "              ",
+      "         !o!  ",
+      "              ",
+      "              ",
+      "              ",
+      "              ",
+      "         xxx  ",
+      "          o   ",
+      "        =     ",
+      "  @           ",
+      "  xxxx        ",
+      "  |           ",
+      "      xxx    x",
+      "              ",
+      "          !   ",
+      "              ",
+      "              ",
+      " o       x    ",
+      " x      x     ",
+      "       x      ",
+      "      x       ",
+      "   xx         ",
+      "              "
+    ]
+  ]
 
-  const actorDict = {
+const actorDict = {
     '@': Player,
     '=': HorizontalFireball,
     'o': Coin,
@@ -359,8 +429,8 @@ const schema = [
     'v': FireRain
 }
 
-  const parser = new LevelParser(actorDict);
-  const level = parser.parse(schema);
-  runLevel(level, DOMDisplay)
-    .then(status => console.log(`Игрок ${status}`));
+
+const parser = new LevelParser(actorDict);
+runGame(schemas, parser, DOMDisplay)
+.then(() => alert('Вы выиграли!'));
 
