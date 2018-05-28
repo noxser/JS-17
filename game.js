@@ -432,7 +432,8 @@ const actorDict = {
 
 
 const parser = new LevelParser(actorDict);
-runGame(schemas, parser, DOMDisplay).then(() => alert('Вы выиграли!'));
+runGame(schemas, parser, DOMDisplay)
+    .then(() => alert('Вы выиграли!'));
 
 // Через локальный веб-сервер нормально распарсились данные
 // Надо запустить LoadLevels потом результат промиса передать в runGame  
