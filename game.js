@@ -343,17 +343,21 @@ class Player extends Actor {
 const schema = [
     '         ',
     '         ',
-    '         ',
-    '         ',
+    '    =    ',
+    '       o ',
     '     !xxx',
     ' @       ',
     'xxx!     ',
     '         '
   ];
+
   const actorDict = {
-    '@': Player
+    '@': Player,
+    '=': HorizontalFireball,
+    'o': Coin    
   }
   const parser = new LevelParser(actorDict);
   const level = parser.parse(schema);
-  runLevel(level, DOMDisplay);
+  runLevel(level, DOMDisplay)
+    .then(status => console.log(`Игрок ${status}`));
 
