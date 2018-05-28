@@ -341,29 +341,6 @@ class Player extends Actor {
     }
 }
 
-// const grid = [
-//     [undefined, 'wall', 'lava'],
-//     ['wall', undefined, 'lava'],
-//     ['wall', undefined, 'lava']
-
-//   ];
-//   const level = new Level(grid);
-//   runLevel(level, DOMDisplay);
-
-//   const schema = [
-//     '         ',
-//     '         ',
-//     '         ',
-//     '         ',
-//     '     !xxx',
-//     '         ',
-//     'xxx!     ',
-//     '         '
-//   ];
-//   const parser = new LevelParser();
-//   const level = parser.parse(schema);
-//   runLevel(level, DOMDisplay);
-
 const schema = [
     '         ',
     '         ',
