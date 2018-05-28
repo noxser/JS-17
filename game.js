@@ -294,7 +294,7 @@ class  FireRain extends Fireball {
 
 class Coin extends Actor {
 
-    constructor(pos = new Vector(0,0)) {
+    constructor(pos = new Vector()) {
         super();
         this.pos =  new Vector(pos.x + 0.2, pos.y + 0.1);
         this.startPos = new Vector(pos.x + 0.2, pos.y + 0.1);
@@ -327,3 +327,23 @@ class Coin extends Actor {
     }
 }
 
+
+class Player extends Actor {
+    constructor(pos = new Vector()) {
+        super();
+        this.pos =  new Vector(pos.x, pos.y - 0.5);  
+        this.size = new Vector(0.8, 1.5);
+        this.speed = new Vector(0, 0);
+    }
+
+    get type () {
+        return 'player';
+    }
+}
+
+const grid = [
+    [undefined, 'wall', 'lava'],
+    ['wall', undefined, 'lava']
+  ];
+  const level = new Level(grid);
+  runLevel(level, DOMDisplay);
