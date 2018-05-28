@@ -339,6 +339,7 @@ class Player extends Actor {
     }
 }
 
+// Реализаци запуска игры
 
 const schemas = [
     [
@@ -431,6 +432,17 @@ const actorDict = {
 
 
 const parser = new LevelParser(actorDict);
-runGame(schemas, parser, DOMDisplay)
-.then(() => alert('Вы выиграли!'));
+runGame(schemas, parser, DOMDisplay).then(() => alert('Вы выиграли!'));
+
+// Через локальный веб-сервер нормально распарсились данные
+// Надо запустить LoadLevels потом результат промиса передать в runGame  
+// loadLevels().then(res => console.log(JSON.parse(res)));
+
+// Как то так: 
+
+// loadLevels()
+//     .then(json => runGame(JSON.parse(json), parser, DOMDisplay)
+//         .then(() => alert('Вы выиграли!'))
+//     );
+        
 
