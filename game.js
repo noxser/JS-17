@@ -9,35 +9,34 @@ class Vector {
     
     plus(vector) {
         if (vector instanceof Vector) {
-            return new Vector(this.x + vector.x, this.y + vector.y)};
+            return new Vector(this.x + vector.x, this.y + vector.y);
+        }
         throw new Error("Можно прибавлять к вектору только вектор типа Vector");
     }
+
     times(num) {
-      return new Vector(this.x * num, this.y * num)};
+      return new Vector(this.x * num, this.y * num);
+    }
 }
 
 
 class Actor {
 
-    constructor(position, size, speed) {
-        if (position === undefined) {
-            this.pos = new Vector();
-        } else if (position instanceof Vector) {
-            this.pos = position;
-        } else {
-            throw new Error("Ошибка в поле position Не являеться объектом класса Vector")};
-        if (size === undefined) {
-            this.size = new Vector(1, 1);
-        } else if (size instanceof Vector) {
-            this.size = size;
-        } else {
-            throw new Error("Ошибка в поле speed! Не являеться объектом класса Vector")};
-        if (speed === undefined) {
-            this.speed = new Vector();
-        } else if (speed instanceof Vector) {
-            this.speed = speed;
-        } else {
-            throw new Error("Ошибка в поле size! Не являеться объектом класса Vector")};
+    constructor(position = new Vector(), size = new Vector(1, 1), speed = new Vector()) {
+
+        if (!(position instanceof Vector)) {
+            throw new Error("Ошибка в поле position Не являеться объектом класса Vector");
+        }
+        if (!(speed instanceof Vector)) {
+            throw new Error("Ошибка в поле speed! Не являеться объектом класса Vector");
+        }
+        if (!(size  instanceof Vector)) {
+            throw new Error("Ошибка в поле size! Не являеться объектом класса Vector");
+        }
+
+        this.pos = position;
+        this.size = size;
+        this.speed = speed;
     } 
 
     act() {};
@@ -64,13 +63,10 @@ class Actor {
 
     isIntersect(obj) {
         if (!(obj instanceof Actor)) {
-            throw new Error('Не является объектом класса Actor')
-        };
-        if (this === obj) {
-          return false;
-        } else {
-          return (obj.left < this.right && obj.right > this.left) && (obj.top < this.bottom && obj.bottom > this.top);
+            throw new Error('Не является объектом класса Actor');
         }
+        if (this === obj) {return false}
+        return (obj.left < this.right && obj.right > this.left) && (obj.top < this.bottom && obj.bottom > this.top);
     }
 }
 
@@ -92,7 +88,8 @@ class Level {
         if (this.grid === undefined) {return 0};
         let max = 0;
         for (let i = 0; i < this.grid.length; i++) {
-            if (this.grid[i].length > max) max = this.grid[i].length};
+            if (this.grid[i].length > max) max = this.grid[i].length;
+        }
         return max;
     }
     
@@ -101,29 +98,19 @@ class Level {
     }
     
     isFinished() {
-        if (this.status !== null && this.finishDelay < 0) {
-            return true;      
-        } else if (this.status == null && this.finishDelay > 0) {
-            return false; 
-        }             
+        if (this.status !== null && this.finishDelay < 0) {return true};
+        if (this.status == null && this.finishDelay > 0) {return false};
         return false;         
     }
     
     actorAt(actor) {
         if (!(actor instanceof Actor)) {
-            throw new Error("Ошибка переданный объект не класса Actor");
-        } else if (this.actors == undefined) {
-            return undefined;
-        } else if (this.actors.length == 1) {
-            return undefined;
-        } else {
-            let act = this.actors.filter(item => actor.isIntersect(item));
-            if (act) {
-                return act[0];
-            } else {
-                return undefined;   
-            }
-        }
+            throw new Error("Ошибка переданный объект не класса Actor")};
+        if (this.actors == undefined || this.actors.length == 1 ) {
+            return undefined};
+
+        let act = this.actors.filter(item => actor.isIntersect(item));
+        if (act) {return act[0]};
     }
 
     obstacleAt(position, size) {
@@ -136,8 +123,8 @@ class Level {
         const Bottom = Math.ceil(position.y+size.y)
         const Right = Math.ceil(position.x+size.x)
                         
-        if (Left < 0 ||  Right > this.width || Top < 0) {return 'wall';} 
-        if (Bottom > this.height) {return 'lava';} 
+        if (Left < 0 ||  Right > this.width || Top < 0) {return 'wall'};
+        if (Bottom > this.height) {return 'lava'};
                 
         for (let y = Top; y < Bottom; y++) {
             for (let x = Left; x < Right; x++) {
@@ -165,7 +152,6 @@ class Level {
             if (this.noMoreActors('coin')) {this.status = 'won'};
         }
     }
-
 }
 
 
@@ -234,7 +220,7 @@ class Fireball extends Actor {
     }
 
     getNextPosition (time = 1) {
-        return (new Vector(this.pos.x + this.speed.x * time, this.pos.y + this.speed.y * time))
+        return this.pos.plus(this.speed.times(time));
     }
 
     handleObstacle () {
@@ -244,10 +230,9 @@ class Fireball extends Actor {
     act (time, level) {
         let nextpos = this.getNextPosition(time)
         if (level.obstacleAt(nextpos, this.size) === undefined) {
-            this.pos = nextpos
-        } else {
-            this.handleObstacle();
+            return this.pos = nextpos 
         }
+        return this.handleObstacle();
     }
 }
 
@@ -317,7 +302,7 @@ class Coin extends Actor {
 
     getNextPosition (time = 1) {
         this.updateSpring(time);
-        return new Vector(this.startPos.x, this.startPos.y + this.getSpringVector(time).y);
+        return this.startPos.plus(this.getSpringVector(time));
     }
 
     act (time = 1) {
@@ -339,88 +324,6 @@ class Player extends Actor {
     }
 }
 
-// Реализаци запуска игры
-
-const schemas = [
-    [
-      "     v                 ",
-      "                       ",
-      "                       ",
-      "                       ",
-      "                       ",
-      "  |                    ",
-      "  o                 o  ",
-      "  x               = x  ",
-      "  x          o o    x  ",
-      "  x  @       xxxxx  x  ",
-      "  xxxxx             x  ",
-      "      x!!!!!!!!!!!!!x  ",
-      "      xxxxxxxxxxxxxxx  ",
-      "                       "
-    ],
-    [
-      "        |           |  ",
-      "                       ",
-      "                       ",
-      "                       ",
-      "                       ",
-      "                       ",
-      "                       ",
-      "                       ",
-      "                       ",
-      "     |                 ",
-      "                       ",
-      "         =      |      ",
-      " @ |  o            o   ",
-      "xxxxxxxxx!!!!!!!xxxxxxx",
-      "                       "
-    ],
-    [
-      "                       ",
-      "                       ",
-      "                       ",
-      "    o                  ",
-      "    x      | x!!x=     ",
-      "         x             ",
-      "                      x",
-      "                       ",
-      "                       ",
-      "                       ",
-      "               xxx     ",
-      "                       ",
-      "                       ",
-      "       xxx  |          ",
-      "                       ",
-      " @                     ",
-      "xxx                    ",
-      "                       "
-    ], [
-      "   v         v",
-      "              ",
-      "         !o!  ",
-      "              ",
-      "              ",
-      "              ",
-      "              ",
-      "         xxx  ",
-      "          o   ",
-      "        =     ",
-      "  @           ",
-      "  xxxx        ",
-      "  |           ",
-      "      xxx    x",
-      "              ",
-      "          !   ",
-      "              ",
-      "              ",
-      " o       x    ",
-      " x      x     ",
-      "       x      ",
-      "      x       ",
-      "   xx         ",
-      "              "
-    ]
-  ]
 
 const actorDict = {
     '@': Player,
@@ -431,19 +334,104 @@ const actorDict = {
 }
 
 
+// Реализаци запуска игры
+
+
 const parser = new LevelParser(actorDict);
-runGame(schemas, parser, DOMDisplay)
-    .then(() => alert('Вы выиграли!'));
 
-// Через локальный веб-сервер нормально распарсились данные
-// Надо запустить LoadLevels потом результат промиса передать в runGame  
-// loadLevels().then(res => console.log(JSON.parse(res)));
+loadLevels().then(res => console.log(JSON.parse(res)));
 
-// Как то так: 
+loadLevels()
+    .then(json => runGame(JSON.parse(json), parser, DOMDisplay)
+        .then(() => alert('Вы выиграли!'))
+    );
 
-// loadLevels()
-//     .then(json => runGame(JSON.parse(json), parser, DOMDisplay)
-//         .then(() => alert('Вы выиграли!'))
-//     );
-        
+
+// Для запуска без локального web сервера
+
+// const schemas = [
+//     [
+//       "     v                 ",
+//       "                       ",
+//       "                       ",
+//       "                       ",
+//       "                       ",
+//       "  |                    ",
+//       "  o                 o  ",
+//       "  x               = x  ",
+//       "  x          o o    x  ",
+//       "  x  @       xxxxx  x  ",
+//       "  xxxxx             x  ",
+//       "      x!!!!!!!!!!!!!x  ",
+//       "      xxxxxxxxxxxxxxx  ",
+//       "                       "
+//     ],
+//     [
+//       "        |           |  ",
+//       "                       ",
+//       "                       ",
+//       "                       ",
+//       "                       ",
+//       "                       ",
+//       "                       ",
+//       "                       ",
+//       "                       ",
+//       "     |                 ",
+//       "                       ",
+//       "         =      |      ",
+//       " @ |  o            o   ",
+//       "xxxxxxxxx!!!!!!!xxxxxxx",
+//       "                       "
+//     ],
+//     [
+//       "                       ",
+//       "                       ",
+//       "                       ",
+//       "    o                  ",
+//       "    x      | x!!x=     ",
+//       "         x             ",
+//       "                      x",
+//       "                       ",
+//       "                       ",
+//       "                       ",
+//       "               xxx     ",
+//       "                       ",
+//       "                       ",
+//       "       xxx  |          ",
+//       "                       ",
+//       " @                     ",
+//       "xxx                    ",
+//       "                       "
+//     ], [
+//       "   v         v",
+//       "              ",
+//       "         !o!  ",
+//       "              ",
+//       "              ",
+//       "              ",
+//       "              ",
+//       "         xxx  ",
+//       "          o   ",
+//       "        =     ",
+//       "  @           ",
+//       "  xxxx        ",
+//       "  |           ",
+//       "      xxx    x",
+//       "              ",
+//       "          !   ",
+//       "              ",
+//       "              ",
+//       " o       x    ",
+//       " x      x     ",
+//       "       x      ",
+//       "      x       ",
+//       "   xx         ",
+//       "              "
+//     ]
+//   ]
+
+// const parser = new LevelParser(actorDict);
+
+// runGame(schemas, parser, DOMDisplay)
+//     .then(() => alert('Вы выиграли!'));
 
