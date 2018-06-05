@@ -19,7 +19,6 @@ class Vector {
     }
 }
 
-
 class Actor {
 
     constructor(position = new Vector(), size = new Vector(1, 1), speed = new Vector()) {
@@ -70,7 +69,6 @@ class Actor {
     }
 }
 
-
 class Level {
     constructor(grid, actors) {
         this.grid = grid;
@@ -98,9 +96,7 @@ class Level {
     }
     
     isFinished() {
-        if (this.status !== null && this.finishDelay < 0) {return true};
-        if (this.status == null && this.finishDelay > 0) {return false};
-        return false;         
+        return this.status !== null && this.finishDelay < 0 ? true : false;         
     }
     
     actorAt(actor) {
@@ -154,7 +150,6 @@ class Level {
     }
 }
 
-
 class LevelParser {
 
     constructor(symbolDict) {
@@ -205,7 +200,6 @@ class LevelParser {
     }
 }
 
-
 class Fireball extends Actor {
 
     constructor(pos = new Vector, speed = new Vector) {
@@ -236,7 +230,6 @@ class Fireball extends Actor {
     }
 }
 
-
 class HorizontalFireball extends Fireball {
 
     constructor(pos) {
@@ -247,7 +240,6 @@ class HorizontalFireball extends Fireball {
 
 }
 
-
 class  VerticalFireball extends Fireball {
 
     constructor(pos) {
@@ -257,7 +249,6 @@ class  VerticalFireball extends Fireball {
     }
 
 }
-
 
 class  FireRain extends Fireball {
 
@@ -273,7 +264,6 @@ class  FireRain extends Fireball {
         this.pos = this.startPos;
     }
 }
-
 
 class Coin extends Actor {
 
@@ -310,7 +300,6 @@ class Coin extends Actor {
     }
 }
 
-
 class Player extends Actor {
     constructor(pos = new Vector()) {
         super();
@@ -324,7 +313,6 @@ class Player extends Actor {
     }
 }
 
-
 const actorDict = {
     '@': Player,
     '=': HorizontalFireball,
@@ -333,9 +321,7 @@ const actorDict = {
     'v': FireRain
 }
 
-
 // Реализаци запуска игры
-
 
 const parser = new LevelParser(actorDict);
 
